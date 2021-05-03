@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="kor">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!--상단 메뉴-->
+    <section>
+        <div id="nav-head">
+            <div><img class="menu-icon" src="./home.png" alt=""></div>
+            <div id="tab-name" class="font-midlarge">투자내역</div>
+            <div><img class="menu-icon"  src="./menu.png" alt=""></div>
+            
+        </div>
+        <div id="nav-menu">
+            <div class="tab-activate">보유코인</div>
+            <div>거래내역</div>
+            <div>미체결</div>
+        </div>
+    </section>
+
+    <!--내 보유자산
+    <section id="total">
+        <div class="margin-updown10"></div>
+        <div class="bold font-midlarge">내 보유자산</div>
+        <div class="margin-updown10"></div>
+        <div id="total-info">
+            <div id="total-left">
+                <div class="ownkrw font-middle right-wall">보유KRW</div>
+                <div class="ownkrw-v font-large right-wall">880</div>
+                <div class="margin-updown20"></div>
+                <div class="flex-space total-left-budget">
+                    <div class="totalbuy font-middle">총매수</div>
+                    <span>8,079</span>
+                </div>
+                <div class="flex-space total-left-budget">
+                    <div class="totalvalue font-middle">총평가</div>
+                    <span>8,079</span>
+                </div>
+                    <div class="margin-updown20"></div>
+                
+            </div>
+            <div class="margin-leftright5"></div>
+            <div id="total-right">
+                <div class="font-middle">총보유자산</div>
+                <div class="font-large">0</div>
+                <div class="margin-updown20"></div>
+                <div class="flex-space">
+                    <div class="font-middle">평가손익</div>
+                    <span>+16</span>
+                </div>
+                <div class="flex-space">
+                    <div class="font-middle">수익률</div>
+                    <span>0.20%</span>
+                </div>
+
+                <div class="margin-updown20"></div>
+            </div>
+        </div>
+    </section>
+    <div class="border-updown"></div>
+    -->
+    <!--보유 코인 상세
+    <section>
+        <div class="coin">
+            <div class="coin-index flex-space">
+                <div class="font-midlarge bold coin-name">비트코인<br>(BTC)</div>
+                <div>
+                    <div class="flex-space">
+                        <div class="font-middle">평가손익</div>
+                        <div class="interest">+16</div>
+                    </div>
+                    <div class="flex-space">
+                        <div class="font-middle">수익률</div>
+                        <div class="interest-rate">0.20%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-updown"></div>
+            <div class="flex-space">
+                <div class="coin-inventory">
+                    <div class="font-midlarge">0.00002 <strong class="bold">BTC</strong></div>
+                    <div class="font-gray font-small">보유수량</div>
+                    <div class="font-midlarge">8,095 <strong class="bold">KRW</strong></div>
+                    <div class="font-gray font-small">평가금액</div>
+                </div>
+                <div class="coin-inventory">
+                    <div class="font-midlarge">14,245 <strong class="bold">KRW</strong></div>
+                    <div class="font-gray font-small">매수평균가</div>
+                    <div class="font-midlarge">8,095 <strong class="bold">KRW</strong></div>
+                    <div class="font-gray font-small">매수금액</div>
+                </div>
+            </div>
+    
+        </div>
+    </section>
+    -->
+
+    <div id="root">
+        <coin></coin>
+    </div>
+</body>
+<style>
+
+    .colorPick{
+        width:20px;
+        height:20px;
+        border: 3px black dotted;
+    }
+    .selectedTab{
+        color: blue;
+        font-weight: bold;
+    }
+</style>
+<script>
+    const eventbus = new Vue();
+    Vue.component("coin",{
+        template:`
+        <div>
+            <section id="total">
+                <div class="margin-updown10"></div>
+                <div class="bold font-midlarge">내 보유자산</div>
+                <div class="margin-updown10"></div>
+                <div id="total-info">
+                    <div id="total-left">
+                        <div class="ownkrw font-middle right-wall">보유KRW</div>
+                        <div class="ownkrw-v font-large right-wall">{{haveKRWformat}}</div>
+                        <div class="margin-updown20"></div>
+                        <div class="flex-space total-left-budget">
+                            <div class="totalbuy font-middle">총매수</div>
+                            <span>{{boughtformat}}</span>
+                        </div>
+                        <div class="flex-space total-left-budget">
+                            <div class="totalvalue font-middle">총평가</div>
+                            <span>{{totalvalueformat}}</span>
+                        </div>
+                            <div class="margin-updown20"></div>
+                        
+                    </div>
+                    <div class="margin-leftright5"></div>
+                    <div id="total-right">
+                        <div class="font-middle">총보유자산</div>
+                        <div class="font-large">{{totalvalueformat}}</div>
+                        <div class="margin-updown20"></div>
+                        <div class="flex-space">
+                            <div class="font-middle">평가손익</div>
+                            <span :style="{color:interestcolor}">{{interest}}</span>
+                        </div>
+                        <div class="flex-space">
+                            <div class="font-middle">수익률</div>
+                            <span :style="{color:interestcolor}">{{interestrate}}%</span>
+                        </div>
+
+                        <div class="margin-updown20"></div>
+                    </div>
+                </div>
+            </section>
+            <div class="border-updown"></div>
+
+
+            <div class="coin">
+                <div class="coin-index flex-space">
+                    <div class="font-midlarge bold coin-name">{{name}}<br>({{ticker}})</div>
+                    <div>
+                        <div class="flex-space">
+                            <div class="font-middle">평가손익</div>
+                            <div class="interest" :style="{color:interestcolor}">{{interest}}</div>
+                        </div>
+                        <div class="flex-space">
+                            <div class="font-middle">수익률</div>
+                            <div class="interest-rate" :style="{color:interestcolor}">{{interestrate}}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-updown"></div>
+                <div class="coin-detail flex-space">
+                    <div class="coin-inventory">
+                        <div class="font-midlarge">{{amount}} <strong class="bold">{{ticker}}</strong></div>
+                        <div class="font-gray font-small">보유수량</div>
+                        <div class="font-midlarge">{{totalvalueformat}} <strong class="bold">{{KRW}}</strong></div>
+                        <div class="font-gray font-small">평가금액</div>
+                    </div>
+                    <div class="coin-inventory">
+                        <div class="font-midlarge">{{originalpriceformat}} <strong class="bold">{{KRW}}</strong></div>
+                        <div class="font-gray font-small">매수평균가</div>
+                        <div class="font-midlarge">{{boughtformat}} <strong class="bold">{{KRW}}</strong></div>
+                        <div class="font-gray font-small">매수금액</div>
+                    </div>
+                </div>
+            </div>
+            <div ref="loaded" class="border-updown"></div>
+        </div>
+        `,
+        data(){
+            return{
+                name: "최소망코인",
+                ticker: "CSM",
+                KRW: "KRW",
+                interestcolor: "black",
+                haveKRW: 10000000,
+                bought:  0,
+                originalprice: 1500,
+                price: 1500,
+                pricechange:0,
+            };
+        },
+        methods: {
+            buy(buywish){
+                this.bought = buywish
+                this.haveKRW -= buywish
+            }
+        },
+        computed: {
+            amount(){
+                return (this.bought/this.originalprice).toFixed(8)
+            },
+            boughtformat(){
+                return this.bought.toLocaleString()
+            },
+            haveKRWformat(){
+                return this.haveKRW.toLocaleString()
+            },
+            originalpriceformat(){
+                return this.originalprice.toLocaleString()
+            },
+            valueformat(){
+                (this.bought + parseInt(this.interest.replace(/,/g,""))).toLocaleString()
+            },
+            totalvalueformat(){
+                return this.totalvalue.toLocaleString()
+            },
+            interestrate(){
+                return (Math.floor(((this.price/this.originalprice)-1)*100 * 100)/100).toFixed(2);
+            },
+            interest(){
+                return (Math.floor(this.bought*this.interestrate*0.01)).toLocaleString()
+            },
+            value(){
+                return this.bought + parseInt(this.interest.replace(/,/g,""))
+            },
+            totalvalue(){
+                return (this.value + this.haveKRW).toLocaleString()
+            }
+            
+        },
+        mounted(){
+                this.price = this.originalprice 
+                change = setInterval(function(){
+                    this.pricechange= Math.floor(Math.random()*400) -100;   // 2.9 -1이 가장 비슷
+                    this.price += this.pricechange
+                    if(this.value > this.bought){
+                        this.interestcolor = "#D60000";
+                    }else if(this.value == this.bought){
+                        this.interestcolor = "black";
+                    }else{
+                        this.interestcolor = "#0051C7"
+                    }
+                }.bind(this),120);
+                window.onload = () =>{
+                    var budget = 1000;
+                    do{
+                        var boughtwish = parseInt(prompt('나는 1,000만원이 있다. 최소망코인을 얼마어치 살까? (만원단위로 입력)', 1));
+                    } while( boughtwish < 0 || boughtwish > budget || isNaN(Number(boughtwish)));
+                    this.buy(boughtwish*10000)
+                }
+            }
+    });
+
+
+    const app = new Vue({
+        el: "#root",
+        data: {
+            jjim: []
+        },
+        methods: {
+            addjjim: function(index){
+                this.jjim.push(index);
+            },
+            deljjim: function(index){
+                let ddex = this.jjim.indexOf(index);
+                if(ddex>=0){
+                    this.jjim.splice(ddex,1);
+                }
+            }
+        },
+        mounted() {
+            eventbus.$on('addjim', (idx) =>{
+                this.jjim.push(idx);
+            });
+        },
+    });
+</script>
+</html>
